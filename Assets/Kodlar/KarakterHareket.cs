@@ -3,6 +3,9 @@ using UnityEngine.UI;
 
 public class KarakterHareket : OrtakÖzellikler, IHareket
 {
+    public int Para;
+    public int Can;
+
     public void Yürü()
     {
         var x = Input.GetAxis("Horizontal");

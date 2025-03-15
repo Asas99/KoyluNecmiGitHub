@@ -8,8 +8,8 @@ public class KarakterHareket : OrtakÖzellikler, IHareket
 
     public void Yürü()
     {
-        var x = Input.GetAxis("Horizontal");
-        var y = Input.GetAxis("Vertical");
+        var x = Input.GetAxisRaw("Horizontal");
+        var y = Input.GetAxisRaw("Vertical");
 
         transform.position += new Vector3(x, y, 0) * YürümeHýzý * Time.deltaTime;
     }

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyCE6ccndi_YRNvU1_TybZNSEkAKNmxcHlA</string>
+	<key>GCM_SENDER_ID</key>
+	<string>129722592411</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.DefaultCompany.KylNecmi</string>
+	<key>PROJECT_ID</key>
+	<string>necmithevillager</string>
+	<key>STORAGE_BUCKET</key>
+	<string>necmithevillager.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:129722592411:ios:13ffdf37123a3a09cdaa3e</string>
+	<key>DATABASE_URL</key>
+	<string>https://necmithevillager-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>

@@ -21,7 +21,7 @@ public class KarakterHareket : Ortak÷zellikler, IHareket
     {
         if (animator != null)
         {       
-            print("X:" + x + ", Y:" + y);
+            //print("X:" + x + ", Y:" + y);
             animator.SetInteger("Yan_input", (int)x);
             animator.SetInteger("Dikey_input", (int)y);
 

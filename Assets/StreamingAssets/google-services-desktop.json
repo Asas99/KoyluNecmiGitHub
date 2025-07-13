@@ -1,0 +1,32 @@
+{
+  "project_info": {
+    "project_number": "129722592411",
+    "firebase_url": "https://necmithevillager-default-rtdb.firebaseio.com",
+    "project_id": "necmithevillager",
+    "storage_bucket": "necmithevillager.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:129722592411:ios:13ffdf37123a3a09cdaa3e",
+        "android_client_info": {
+          "package_name": "com.DefaultCompany.KylNecmi"
+        }
+      },
+      "api_key": [
+        {
+          "current_key": "AIzaSyCE6ccndi_YRNvU1_TybZNSEkAKNmxcHlA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 0
+        },
+        "appinvite_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

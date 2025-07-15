@@ -7,6 +7,7 @@ using Firebase.Extensions;
 public class DataSaver : MonoBehaviour
 {
     public long kullaniciSayisi = 0;
+    public int UserPlayedBefore; //0-false, 1-true
     public GameObject BinalarParent;
     public List<BinaVeri> binaVeris; // Dýþarýdan atanacak (Inspector ya da baþka bir script)
 
@@ -34,6 +35,10 @@ public class DataSaver : MonoBehaviour
         if (binaVeriScript != null)
         {
             binaVeris = binaVeriScript.binaVeris;
+        }
+        if (PlayerPrefs.HasKey("UserSaved"))
+        {
+            UserPlayedBefore = PlayerPrefs.GetInt("UserSaved");
         }
     }
     void Start()
@@ -63,29 +68,35 @@ public class DataSaver : MonoBehaviour
         GetKullaniciSayisi(kullaniciSayisi =>
         {
             string json = JsonUtility.ToJson(new BinaVeriWrapper { binalar = binaVeris });
+            if(UserPlayedBefore == 0)
+            {
+                string yeniKullaniciId = "kullanici" + kullaniciSayisi;
+                dbRef.Child("kullanicilar").Child(yeniKullaniciId).Child("koy").SetRawJsonValueAsync(json)
+                    .ContinueWithOnMainThread(t =>
+                    {
+                        if (t.IsCompleted)
+                            Debug.Log("Veriler Firebase'e kaydedildi.");
+                        else
+                            Debug.LogError("Firebase'e veri kaydedilemedi: " + t.Exception);
+                    });
+                UserPlayedBefore = 1;
+                PlayerPrefs.SetInt("UserSaved", UserPlayedBefore);
+            }
 
-            string yeniKullaniciId = "kullanici" + kullaniciSayisi;
-
-            dbRef.Child("kullanicilar").Child(yeniKullaniciId).Child("koy").SetRawJsonValueAsync(json)
-                .ContinueWithOnMainThread(t =>
-                {
-                    if (t.IsCompleted)
-                        Debug.Log("Veriler Firebase'e kaydedildi.");
-                    else
-                        Debug.LogError("Firebase'e veri kaydedilemedi: " + t.Exception);
-                });
         });
-        string json = JsonUtility.ToJson(new BinaVeriWrapper { binalar = binaVeris });
 
-            dbRef.Child("kullanicilar").Child("kullanici" + kullaniciSayisi).Child("koy").SetRawJsonValueAsync(json)
-                .ContinueWithOnMainThread(t =>
-                {
-                    if (t.IsCompleted)
-                        Debug.Log("Veriler Firebase'e kaydedildi.");
-                    else
-                        Debug.LogError("Firebase'e veri kaydedilemedi: " + t.Exception);
-                });
-        }
+
+        //string json = JsonUtility.ToJson(new BinaVeriWrapper { binalar = binaVeris });
+
+            //dbRef.Child("kullanicilar").Child(yeniKullaniciId).Child("koy").SetRawJsonValueAsync(json)
+            //    .ContinueWithOnMainThread(t =>
+            //    {
+            //        if (t.IsCompleted)
+            //            Debug.Log("Veriler Firebase'e kaydedildi.");
+            //        else
+            //            Debug.LogError("Firebase'e veri kaydedilemedi: " + t.Exception);
+            //    });
+    }
     }
     [System.Serializable]
     public class BinaVeriWrapper

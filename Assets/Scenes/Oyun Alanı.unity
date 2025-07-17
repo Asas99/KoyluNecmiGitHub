@@ -1247,8 +1247,10 @@ MonoBehaviour:
   animator: {fileID: 728473768}
   Para: 0
   Can: 100
+  OnLobby: 0
   x: 0
   y: 0
+  PosText: {fileID: 0}
 --- !u!95 &728473768
 Animator:
   serializedVersion: 7

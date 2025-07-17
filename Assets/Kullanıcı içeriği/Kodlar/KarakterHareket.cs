@@ -1,6 +1,7 @@
 using Photon.Pun;
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class KarakterHareket : OrtakÖzellikler, IHareket
@@ -10,7 +11,7 @@ public class KarakterHareket : OrtakÖzellikler, IHareket
     public bool OnLobby;
     [SerializeField]
     private float x, y;
-
+    public GameObject PosText;
     public void Yürü()
     {
         x = Input.GetAxisRaw("Horizontal");
@@ -75,20 +76,38 @@ public class KarakterHareket : OrtakÖzellikler, IHareket
     // Update is called once per frame
     void Update()
     {
-        if (!OnLobby) 
+        //if (!OnLobby) 
+        //{
+        //    Yürü();
+        //    AnimasyonuDeðiþtir();
+        //}
+        //if (OnLobby)
+        //{
+        //    PhotonView photonView = gameObject.GetComponent<PhotonView>();
+        //    if (photonView.IsMine)
+        //    {
+        //        PosText.GetComponent<TextMesh>().text = gameObject.transform.position.ToString() + PhotonNetwork.CurrentRoom.PlayerCount;
+        //        print(gameObject.name);
+        //        Yürü();
+        //        AnimasyonuDeðiþtir();
+        //    }
+        //}
+        string currentScene = SceneManager.GetActiveScene().name;
+
+        if (currentScene == "Pazar")  // Sadece lobi sahnesindeyse
         {
-            Yürü();
-            AnimasyonuDeðiþtir();
-        }
-        if (OnLobby)
-        {
-            PhotonView photonView = gameObject.GetComponent<PhotonView>();
-            if (photonView.IsMine)
+            PhotonView photonView = GetComponent<PhotonView>();
+            if (photonView != null && photonView.IsMine)
             {
-                print(gameObject.name);
                 Yürü();
                 AnimasyonuDeðiþtir();
             }
+        }
+        else
+        {
+            Yürü();
+            AnimasyonuDeðiþtir();   // Lobi dýþý sahnelerde hareket ve animasyon kontrolü yok
+            // Ýstersen baþka iþlemler burada olabilir
         }
     }
 }

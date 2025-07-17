@@ -15,6 +15,7 @@ public class CamFollow : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        cam.transform.position = Player.transform.position + offset; 
+        cam.transform.position = Player.transform.position + offset;
+        cam.transform.LookAt(Player.transform);
     }
 }

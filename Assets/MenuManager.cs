@@ -15,38 +15,72 @@ public class MenuManager : MonoBehaviour
 
     void Start()
     {
+        // Oyuncu ismi varsa otomatik doldur
         if (PlayerPrefs.HasKey(PlayerNameKey))
             playerNameInput.text = PlayerPrefs.GetString(PlayerNameKey);
 
+        // Daha önce köy oluþturulmuþsa Devam Et aktif olsun
         continueButton.interactable = PlayerPrefs.HasKey(HasVillageKey);
     }
 
     public void OnClick_NewVillage()
     {
-        if (string.IsNullOrEmpty(playerNameInput.text)) return;
+        string playerName = playerNameInput.text.Trim();
+        if (string.IsNullOrEmpty(playerName))
+        {
+            Debug.LogWarning("Oyuncu ismi boþ olamaz.");
+            return;
+        }
 
-        PlayerPrefs.SetString(PlayerNameKey, playerNameInput.text);
+        PlayerPrefs.SetString(PlayerNameKey, playerName);
         PlayerPrefs.SetInt(HasVillageKey, 1);
         PlayerPrefs.Save();
 
-        NetworkManager.singleton.StartHost(); // Oyuncu host olur
+        if (NetworkManager.singleton == null)
+        {
+            Debug.LogError("NetworkManager sahnede eksik!");
+            return;
+        }
+
+        NetworkManager.singleton.StartHost(); // Oyuncu host olur (kendi köyünü baþlatýr)
     }
 
     public void OnClick_Continue()
     {
-        if (!PlayerPrefs.HasKey(HasVillageKey)) return;
+        if (!PlayerPrefs.HasKey(HasVillageKey))
+        {
+            Debug.LogWarning("Daha önce köy oluþturulmamýþ.");
+            return;
+        }
 
-        NetworkManager.singleton.StartHost(); // Kendi köyüne devam
+        if (NetworkManager.singleton == null)
+        {
+            Debug.LogError("NetworkManager sahnede eksik!");
+            return;
+        }
+
+        NetworkManager.singleton.StartHost(); // Oyuncu daha önce oluþturduðu köye girer
     }
 
     public void OnClick_EnterCity()
     {
-        if (string.IsNullOrEmpty(playerNameInput.text)) return;
+        string playerName = playerNameInput.text.Trim();
+        if (string.IsNullOrEmpty(playerName))
+        {
+            Debug.LogWarning("Oyuncu ismi boþ olamaz.");
+            return;
+        }
 
-        PlayerPrefs.SetString(PlayerNameKey, playerNameInput.text);
+        PlayerPrefs.SetString(PlayerNameKey, playerName);
         PlayerPrefs.Save();
 
-        NetworkManager.singleton.networkAddress = "127.0.0.1"; // Þehir server IP’si
-        NetworkManager.singleton.StartClient();
+        if (NetworkManager.singleton == null)
+        {
+            Debug.LogError("NetworkManager sahnede eksik!");
+            return;
+        }
+
+        NetworkManager.singleton.networkAddress = " 192.168.0.21"; // Þehir sunucusunun IP'si
+        NetworkManager.singleton.StartClient(); // Þehre baðlan
     }
 }

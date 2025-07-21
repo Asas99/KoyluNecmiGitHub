@@ -9,6 +9,7 @@ public class MenuManager : MonoBehaviour
     public Button newVillageButton;
     public Button continueButton;
     public Button enterCityButton;
+    public Button cityServerButton; // Sadece þehir sunucusu için (build'de görünür)
 
     const string PlayerNameKey = "PlayerName";
     const string HasVillageKey = "HasVillage";
@@ -19,8 +20,21 @@ public class MenuManager : MonoBehaviour
         if (PlayerPrefs.HasKey(PlayerNameKey))
             playerNameInput.text = PlayerPrefs.GetString(PlayerNameKey);
 
-        // Daha önce köy oluþturulmuþsa Devam Et aktif olsun
+        // Daha önce köy oluþturulmuþsa Devam Et aktif olur
         continueButton.interactable = PlayerPrefs.HasKey(HasVillageKey);
+
+        // Þehir server butonunu sadece server build'de göster
+#if UNITY_EDITOR
+        cityServerButton.gameObject.SetActive(false);
+#else
+        cityServerButton.gameObject.SetActive(IsCityServerBuild());
+#endif
+    }
+
+    bool IsCityServerBuild()
+    {
+        // Örneðin PlayerPrefs veya komut satýrý argümanýna göre kontrol edebilirsin
+        return true; // Þimdilik hep true, istersen özelleþtirebiliriz
     }
 
     public void OnClick_NewVillage()
@@ -42,7 +56,8 @@ public class MenuManager : MonoBehaviour
             return;
         }
 
-        NetworkManager.singleton.StartHost(); // Oyuncu host olur (kendi köyünü baþlatýr)
+        NetworkManager.singleton.StartHost();
+        NetworkManager.singleton.ServerChangeScene("VillageScene");
     }
 
     public void OnClick_Continue()
@@ -59,7 +74,8 @@ public class MenuManager : MonoBehaviour
             return;
         }
 
-        NetworkManager.singleton.StartHost(); // Oyuncu daha önce oluþturduðu köye girer
+        NetworkManager.singleton.StartHost();
+        NetworkManager.singleton.ServerChangeScene("VillageScene");
     }
 
     public void OnClick_EnterCity()
@@ -80,7 +96,20 @@ public class MenuManager : MonoBehaviour
             return;
         }
 
-        NetworkManager.singleton.networkAddress = " 192.168.0.21"; // Þehir sunucusunun IP'si
-        NetworkManager.singleton.StartClient(); // Þehre baðlan
+        NetworkManager.singleton.networkAddress = "192.168.0.21"; // Þehir sunucusu IP
+        NetworkManager.singleton.StartClient();
+    }
+
+    public void OnClick_StartCityServer()
+    {
+        Debug.Log("Þehir serverý baþlatýlýyor...");
+        if (NetworkManager.singleton == null)
+        {
+            Debug.LogError("NetworkManager sahnede eksik!");
+            return;
+        }
+
+        NetworkManager.singleton.StartHost();
+        NetworkManager.singleton.ServerChangeScene("CityScene");
     }
 }

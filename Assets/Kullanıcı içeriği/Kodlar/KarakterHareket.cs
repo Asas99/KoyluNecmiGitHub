@@ -1,4 +1,5 @@
 using Photon.Pun;
+using Photon.Realtime;
 using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -8,10 +9,16 @@ public class KarakterHareket : OrtakÖzellikler, IHareket
 {
     public int Para;
     public int Can;
-    public bool OnLobby;
     [SerializeField]
     private float x, y;
-    public GameObject PosText;
+    public float XScale;
+
+    private void Start()
+    {
+        XScale = transform.localScale.x;
+
+    }
+
     public void Yürü()
     {
         x = Input.GetAxisRaw("Horizontal");
@@ -23,7 +30,7 @@ public class KarakterHareket : OrtakÖzellikler, IHareket
     public void AnimasyonuDeðiþtir()
     {
         if (animator != null)
-        {       
+        {
             //print("X:" + x + ", Y:" + y);
             animator.SetInteger("Yan_input", (int)x);
             animator.SetInteger("Dikey_input", (int)y);
@@ -48,66 +55,38 @@ public class KarakterHareket : OrtakÖzellikler, IHareket
             }
             if (x == 1)
             {
+                if (XScale < 0)
+                {
+                    XScale = -XScale;
+                }
                 animator.SetBool("Sol", false);
                 animator.SetBool("Sað", true);
                 animator.SetBool("Arka", false);
                 animator.SetBool("Ön", false);
-                transform.localEulerAngles = new Vector3(0, 0,
-    0);
+                transform.localScale = new Vector3(XScale, transform.localScale.y, transform.localScale.z);
             }
             if (x == -1)
             {
+                if (XScale > 0)
+                {
+                    XScale = -XScale;
+                }
                 animator.SetBool("Sað", false);
                 animator.SetBool("Sol", true);
                 animator.SetBool("Arka", false);
                 animator.SetBool("Ön", false);
-                transform.localEulerAngles = new Vector3(0, 180,
-                    0);
+                transform.localScale = new Vector3(XScale, transform.localScale.y, transform.localScale.z);
             }
         }
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public void Update()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        //if (!OnLobby) 
-        //{
-        //    Yürü();
-        //    AnimasyonuDeðiþtir();
-        //}
-        //if (OnLobby)
-        //{
-        //    PhotonView photonView = gameObject.GetComponent<PhotonView>();
-        //    if (photonView.IsMine)
-        //    {
-        //        PosText.GetComponent<TextMesh>().text = gameObject.transform.position.ToString() + PhotonNetwork.CurrentRoom.PlayerCount;
-        //        print(gameObject.name);
-        //        Yürü();
-        //        AnimasyonuDeðiþtir();
-        //    }
-        //}
-        string currentScene = SceneManager.GetActiveScene().name;
-
-        if (currentScene == "Pazar")  // Sadece lobi sahnesindeyse
-        {
-            PhotonView photonView = GetComponent<PhotonView>();
-            if (photonView != null && photonView.IsMine)
+            if (animator != null)
             {
-                Yürü();
-                AnimasyonuDeðiþtir();
+                    Yürü();
+                    AnimasyonuDeðiþtir();
             }
-        }
-        else
-        {
-            Yürü();
-            AnimasyonuDeðiþtir();   // Lobi dýþý sahnelerde hareket ve animasyon kontrolü yok
-            // Ýstersen baþka iþlemler burada olabilir
-        }
     }
 }
+

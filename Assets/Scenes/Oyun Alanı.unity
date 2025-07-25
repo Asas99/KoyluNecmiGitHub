@@ -2353,7 +2353,6 @@ MonoBehaviour:
   x: 0
   y: 0
   XScale: 0
-  textMesh: {fileID: 0}
 --- !u!95 &3502883559439050953
 Animator:
   serializedVersion: 7

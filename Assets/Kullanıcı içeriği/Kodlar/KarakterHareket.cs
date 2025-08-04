@@ -4,8 +4,8 @@ using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-
 public class KarakterHareket : OrtakÖzellikler, IHareket
+
 {
     public int Para;
     public int Can;
@@ -23,8 +23,10 @@ public class KarakterHareket : OrtakÖzellikler, IHareket
     {
         x = Input.GetAxisRaw("Horizontal");
         y = Input.GetAxisRaw("Vertical");
-        transform.position += new Vector3(x, y, 0) * YürümeHýzý * Time.deltaTime;
-
+        if (!gameObject.GetComponent<ArabaKullan>().ArabadaMý)
+        {
+            transform.position += new Vector3(x, y, 0) * YürümeHýzý * Time.deltaTime;
+        }
     }
 
     public void AnimasyonuDeðiþtir()

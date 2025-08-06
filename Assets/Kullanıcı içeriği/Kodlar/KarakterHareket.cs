@@ -23,7 +23,7 @@ public class KarakterHareket : OrtakÖzellikler, IHareket
     {
         x = Input.GetAxisRaw("Horizontal");
         y = Input.GetAxisRaw("Vertical");
-        if (!gameObject.GetComponent<ArabaKullan>().ArabadaMý)
+        if (!gameObject.GetComponent<ArabayaÝnBin>().ArabadaMý)
         {
             transform.position += new Vector3(x, y, 0) * YürümeHýzý * Time.deltaTime;
         }

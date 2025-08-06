@@ -19,6 +19,6 @@ public class SosyalTabiSaklaGöster : MonoBehaviour
     {
         SaklıMı = !SaklıMı;
         print(SaklıMı);
-        animator.SetBool("Göster", SaklıMı);
+        animator.SetBool("Göster", !SaklıMı);
     }
 }

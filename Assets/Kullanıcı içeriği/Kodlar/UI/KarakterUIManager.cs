@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class UIManager : MonoBehaviour
+public class KarakterUIManager : MonoBehaviour
 {
     public Slider CanSlider;
     public Text ParaText;

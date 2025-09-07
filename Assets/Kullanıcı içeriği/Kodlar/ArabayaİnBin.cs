@@ -19,6 +19,7 @@ public class ArabayaÝnBin : MonoBehaviour , IAraba
         if (Input.GetKeyUp(KeyCode.T) && BinebilirMi)
         {
             ArabadaMý = !ArabadaMý;
+
         }
 
         if (BinebilirMi)
@@ -33,20 +34,14 @@ public class ArabayaÝnBin : MonoBehaviour , IAraba
             }
         }
 
-        //Parent'ý güncelle. Parent oyuncu olarak ayarlanýyor çünkü kamera onda.
         if (ArabadaMý)
         {
             gameObject.GetComponent<SpriteRenderer>().enabled = false;
-            gameObject.transform.parent = Araba.transform;
+            gameObject.transform.position = new Vector3(Araba.transform.position.x, Araba.transform.position.y, Araba.transform.position.z - 0.01f);
         }
         else
         {
             gameObject.GetComponent<SpriteRenderer>().enabled = true;
-            if(Araba != null)
-            {
-                gameObject.transform.parent = null;
-            }
-
         }
     }
 
@@ -60,7 +55,7 @@ public class ArabayaÝnBin : MonoBehaviour , IAraba
     }
     public void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.CompareTag("Araba"))
+        if (collision.CompareTag("Araba") && !ArabadaMý)
         {
             BinebilirMi = false;
             Araba = null;

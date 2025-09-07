@@ -7,7 +7,7 @@ public class KameraTakip : MonoBehaviour
     public Vector3 offset = new Vector3(0f, 0f, -10f); // Genellikle Z offset -10 olur
     public float smoothSpeed = 5f;         // Takip hızı
 
-    void LateUpdate()
+    void FixedUpdate()
     {
         if (target == null) return;
 

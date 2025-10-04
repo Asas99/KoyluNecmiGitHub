@@ -21,6 +21,10 @@ public class ArabaKullan : MonoBehaviour
     public SürüşTipi sürüşTipi = SürüşTipi.P;
     public enum SürüşTipi { P, R, N, D }
 
+    [Header("Benzin")]
+    public float MaxBenzin;
+    public float MevcutBenzin;
+    public float AdımBaşıHarcananBenzin;
 
     private Rigidbody2D rb;
     [SerializeField]
@@ -42,11 +46,15 @@ public class ArabaKullan : MonoBehaviour
         inputGaz = Input.GetAxisRaw("Vertical");   // W/S
         inputYon = Input.GetAxisRaw("Horizontal"); // A/D
 
-        // Vites değişimi (scroll ile)
-        int vites = (int)sürüşTipi;
-        vites += (int)Input.mouseScrollDelta.y;
-        vites = Mathf.Clamp(vites, 0, 3);
-        sürüşTipi = (SürüşTipi)vites;
+        if (ArabayaİnBin.ArabadaMı)
+        {
+            // Vites değişimi (scroll ile)
+            int vites = (int)sürüşTipi;
+            vites += (int)Input.mouseScrollDelta.y;
+            vites = Mathf.Clamp(vites, 0, 3);
+            sürüşTipi = (SürüşTipi)vites;
+            MevcutBenzin = Mathf.Clamp(MevcutBenzin, 0, MaxBenzin);
+        }
 
         #region Direksiyon
         // Direksiyon açısını ayarla
@@ -62,61 +70,82 @@ public class ArabaKullan : MonoBehaviour
     {
         #region Hareket etme
             if (ArabayaİnBin.ArabadaMı)
-            // Park → tamamen durdur
-            if (sürüşTipi == SürüşTipi.P)
             {
-                rb.linearVelocity = Vector2.zero;
-                rb.angularVelocity = 0f;
-                return;
-            }
-
-            // İleri ve yan hız bileşenlerini ayır
-            Vector2 ileri = transform.up * Vector2.Dot(rb.linearVelocity, transform.up);
-            Vector2 yan = transform.right * Vector2.Dot(rb.linearVelocity, transform.right);
-
-            // Motor kuvvetleri
-            if (sürüşTipi == SürüşTipi.D)
-            {
-                rb.AddForce(transform.up * inputGaz * ivme);
-            }
-            else if (sürüşTipi == SürüşTipi.R)
-            {
-                if (inputGaz > 0)
+                // Park → tamamen durdur
+                if (sürüşTipi == SürüşTipi.P)
                 {
-                    rb.AddForce(-transform.up * inputGaz * ivme);
+                    rb.linearVelocity = Vector2.zero;
+                    rb.angularVelocity = 0f;
+                    MevcutBenzin -= AdımBaşıHarcananBenzin / 2;
+                return;
                 }
-            }
-            //Fren
-            else if (inputGaz < 0) // fren
-            {
-            if (Mathf.Abs(rb.linearVelocity.y) >= 0.2f)
-            {
-                rb.AddForce(-rb.linearVelocity.normalized * frenKuvveti);
-            }
-            else
-            {
-                rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0);
-            }
-            }
+
+                // İleri ve yan hız bileşenlerini ayır
+                Vector2 ileri = transform.up * Vector2.Dot(rb.linearVelocity, transform.up);
+                Vector2 yan = transform.right * Vector2.Dot(rb.linearVelocity, transform.right);
+
+                if(MevcutBenzin > 0)
+                {
+                    // Motor kuvvetleri
+                    if (sürüşTipi == SürüşTipi.D)
+                    {
+                        rb.AddForce(transform.up * inputGaz * ivme);
+                        if(inputGaz != 0)
+                        {
+                            MevcutBenzin -= AdımBaşıHarcananBenzin;
+                        }
+                        else
+                        {
+                            MevcutBenzin -= AdımBaşıHarcananBenzin / 2;
+                        }
+                    }
+                    else if (sürüşTipi == SürüşTipi.R)
+                    {
+                        if (inputGaz > 0)
+                        {
+                            rb.AddForce(-transform.up * inputGaz * ivme);
+                            MevcutBenzin -= AdımBaşıHarcananBenzin;
+                        }
+                        else
+                        {
+                            MevcutBenzin -= AdımBaşıHarcananBenzin / 2;
+                        }
+                }
+                }
+
+                //Fren
+                else if (inputGaz < 0) // fren
+                {
+                if (Mathf.Abs(rb.linearVelocity.y) >= 0.2f)
+                {
+                    rb.AddForce(-rb.linearVelocity.normalized * frenKuvveti);
+                }
+                else
+                {
+                    rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0);
+                }
+                }
             
-            //Sürtünme
-            if (rb.linearVelocity.magnitude > 0.01f)
-            {
-                rb.AddForce(-rb.linearVelocity.normalized * SürtünmeKatsayısı);
-            }
-            else
-            {
-                // Çok yavaşsa hızı tamamen sıfırla
-                rb.linearVelocity = Vector2.zero;
-            }
+                //Sürtünme
+                if (rb.linearVelocity.magnitude > 0.01f)
+                {
+                    rb.AddForce(-rb.linearVelocity.normalized * SürtünmeKatsayısı);
+                }
+                else
+                {
+                    // Çok yavaşsa hızı tamamen sıfırla
+                    rb.linearVelocity = Vector2.zero;
+                }
 
 
-        // Maksimum hız sınırı
-        float hiz = Vector2.Dot(rb.linearVelocity, transform.up);
-            if (sürüşTipi == SürüşTipi.D && hiz > maxIleriHiz)
-                rb.linearVelocity = transform.up * maxIleriHiz;
-            if (sürüşTipi == SürüşTipi.R && hiz < maxGeriHiz)
-                rb.linearVelocity = transform.up * maxGeriHiz;
+            // Maksimum hız sınırı
+            float hiz = Vector2.Dot(rb.linearVelocity, transform.up);
+                if (sürüşTipi == SürüşTipi.D && hiz > maxIleriHiz)
+                    rb.linearVelocity = transform.up * maxIleriHiz;
+                if (sürüşTipi == SürüşTipi.R && hiz < maxGeriHiz)
+                    rb.linearVelocity = transform.up * maxGeriHiz;
+            }
+
         #endregion
 
         #region Direksiyon

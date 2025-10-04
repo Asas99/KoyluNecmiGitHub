@@ -1,3 +1,5 @@
+using Unity.VisualScripting;
+
 public interface IKarakterMekanikleri
 {
     //Script nameholder
@@ -9,6 +11,7 @@ public interface IHareket
 public interface IAraba
 {
     bool ArabadaMı {get; set;}
-    bool BinebilirMi { get; set; }
+    bool BinebilirMi {get; set; }
+
     public void ArabayaBinİn();
 }

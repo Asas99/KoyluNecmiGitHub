@@ -16,7 +16,6 @@ public class KarakterHareket : OrtakÖzellikler, IHareket
     private void Start()
     {
         XScale = transform.localScale.x;
-
     }
 
     public void Yürü()
@@ -84,11 +83,11 @@ public class KarakterHareket : OrtakÖzellikler, IHareket
 
     public void Update()
     {
-            if (animator != null)
-            {
-                    Yürü();
-                    AnimasyonuDeðiþtir();
-            }
+        if (animator != null)
+        {
+                Yürü();
+                AnimasyonuDeðiþtir();
+        }
     }
 }
 

@@ -8,6 +8,10 @@ public class ArabayaÝnBin : MonoBehaviour , IAraba
     public bool BinebilirMi { get; set; }
     public GameObject Araba;
 
+    [Header("Arayüz")]
+    public GameObject ArabaUI;
+    public Slider BenzinSlider;
+
     // Update is called once per frame
     void Update()
     {
@@ -16,10 +20,10 @@ public class ArabayaÝnBin : MonoBehaviour , IAraba
 
     public void ArabayaBinÝn()
     {
+        ArabaUI.SetActive(ArabadaMý);
         if (Input.GetKeyUp(KeyCode.T) && BinebilirMi)
         {
             ArabadaMý = !ArabadaMý;
-
         }
 
         if (BinebilirMi)
@@ -38,6 +42,8 @@ public class ArabayaÝnBin : MonoBehaviour , IAraba
         {
             gameObject.GetComponent<SpriteRenderer>().enabled = false;
             gameObject.transform.position = new Vector3(Araba.transform.position.x, Araba.transform.position.y, Araba.transform.position.z - 0.01f);
+            BenzinSlider.maxValue = Araba.GetComponent<ArabaKullan>().MaxBenzin;
+            BenzinSlider.value = Araba.GetComponent<ArabaKullan>().MevcutBenzin;
         }
         else
         {
